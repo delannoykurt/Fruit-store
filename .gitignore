@@ -1,0 +1,16 @@
+# Binaire compilé
+Fruitstore
+*.exe
+*.out
+
+# Fichiers temporaires
+*.log
+*.tmp
+*.swp
+
+# Répertoire de dépendances (si utilisé)
+vendor/
+
+# Paramètres IDE
+.vscode/
+.idea/
