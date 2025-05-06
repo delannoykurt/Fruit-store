@@ -24,7 +24,7 @@ func main() {
 	http.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir("static"))))
 
 	println("Serveur démarré sur http://localhost:8080")
-	err := http.ListenAndServe(":8080", nil)
+	err := http.ListenAndServe(":8092", nil)
 	if err != nil {
 		log.Fatal("Erreur serveur :", err)
 	}
