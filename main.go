@@ -21,9 +21,11 @@ type Product struct {
 func main() {
 	http.HandleFunc("/", homeHandler)
 	http.HandleFunc("/add", addHandler)
+	http.HandleFunc("/stock", stockHandler)
+
 	http.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir("static"))))
 
-	println("Serveur démarré sur http://localhost:8080")
+	println("Serveur démarré sur http://localhost:8092")
 	err := http.ListenAndServe(":8092", nil)
 	if err != nil {
 		log.Fatal("Erreur serveur :", err)
@@ -63,4 +65,25 @@ func addHandler(w http.ResponseWriter, r *http.Request) {
 	stock = append(stock, p)
 
 	http.Redirect(w, r, "/", http.StatusSeeOther)
+}
+
+func stockHandler(w http.ResponseWriter, r *http.Request) {
+	tmpl := template.Must(template.New("stock.html").Funcs(template.FuncMap{
+		"index": func(arr []string, i int) string {
+			if i >= 0 && i < len(arr) {
+				return arr[i]
+			}
+			return "❓"
+		},
+	}).ParseFiles("templates/stock.html"))
+
+	data := struct {
+		Fruits []string
+		Items  []Product
+	}{
+		Fruits: []string{"🍌 Banane", "🍒 Cerise", "🍎 Pomme", "🍓 Fraise", "🍍 Ananas", "🍑 Abricot", "🥝 Kiwi"},
+		Items:  stock,
+	}
+
+	tmpl.Execute(w, data)
 }
